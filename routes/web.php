@@ -16,7 +16,9 @@ Route::get('/', function () {
 });
 
 Route::get('/gamestatus/{id}', function($id) {
-    return view('gamestatus', ['id' => $id]);
+    return view('gamestatus', ['code' => $id]);
 });
 
 Route::get('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
+Route::post('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
+Route::post('/api/answer', ['uses' => 'QuizController@makeAnswer']);

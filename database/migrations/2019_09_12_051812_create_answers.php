@@ -15,10 +15,9 @@ class CreateAnswers extends Migration
     {
         Schema::create('answers', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')
-                ->references('id')->on('users');
-            $table->integer('quiz_id')
-                ->references('id')->on('quizzes');
+            $table->string('username');
+            $table->integer('question_id')
+                ->references('id')->on('questions');
             $table->integer('answer');
             $table->timestamps();
         });
