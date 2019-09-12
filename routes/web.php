@@ -11,6 +11,8 @@
 |
 */
 
+use http\Env\Request;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,6 +21,10 @@ Route::get('/gamestatus/{id}', function($id) {
     return view('gamestatus', ['code' => $id]);
 });
 
+Route::get('/game/{id}', function($id) {
+    return view('game_client', ['code' => $id]);
+});
+
 Route::get('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
 Route::post('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
-Route::post('/api/answer', ['uses' => 'QuizController@makeAnswer']);
+Route::get('/api/answer', ['uses' => 'QuizController@makeAnswer']);
