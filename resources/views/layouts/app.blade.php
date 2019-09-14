@@ -37,13 +37,18 @@
 <script src="{{ asset('js/jquery-3.4.1.min.js') }}"></script>
 <script>
 jQuery(document).ready(function($) {
-
     //fragen als Element auf der DOM bekommen
     let frage1 = $("#frage1");
     let frage2 = $("#frage2");
     let frage3 = $("#frage3");
     let frage4 = $("#frage4");
+    //Anwtorten als DOM Element bekommen
+    let antwort1 = $("#antwort1");
+    let antwort2 = $("#antwort2");
+    let antwort3 = $("#antwort3");
+    let antwort4 = $("#antwort4");
 
+    let textCounter = $("#counter");
     $.ajax({
         type: 'GET',
         url: 'http://localhost:8000/api/gamestatus?code=EnBW',
@@ -56,11 +61,41 @@ jQuery(document).ready(function($) {
             let status = data['quiz']['status'];
 
             switch (status){
+                case '0':
+                    $(frage1).attr('style', 'display: none !important');
+                    $(frage2).attr('style', 'display: none !important');
+                    $(frage3).attr('style', 'display: none !important');
+                    $(frage4).attr('style', 'display: none !important');
+                    break;
                 case '1':
                     $(frage1).attr('style', 'display: block !important');
                     $(frage2).attr('style', 'display: block !important');
                     $(frage3).attr('style', 'display: block !important');
                     $(frage4).attr('style', 'display: block !important');
+                    break;
+                case '2':
+                    $(antwort1).attr("disabled", false);
+                    $(antwort2).attr("disabled", false);
+                    $(antwort3).attr("disabled", false);
+                    $(antwort4).attr("disabled", false);
+
+                    let x = 31;
+
+                    for (let i = 0; i < x; i++){
+                        setTimeout(function(){
+                            x --;
+                            console.log(x);
+                            $(textCounter).text(x);
+                            if( x == 0){
+                                $(antwort1).attr("disabled", true);
+                                $(antwort2).attr("disabled", true);
+                                $(antwort3).attr("disabled", true);
+                                $(antwort4).attr("disabled", true);
+                            }
+                        }, 1000 * i);
+                    }
+
+
                     break;
             }
 
