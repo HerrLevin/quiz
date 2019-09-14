@@ -71,10 +71,10 @@
                             //no Questions
                             case '0':
                                 console.log("case 0");
-                                $(frage1).addClass("display-none");
-                                $(frage2).addClass("display-none");
-                                $(frage3).addClass("display-none");
-                                $(frage4).addClass("display-none");
+                                $(frage1).addClass("display-none").removeClass("correct-answer");
+                                $(frage2).addClass("display-none").removeClass("correct-answer");
+                                $(frage3).addClass("display-none").removeClass("correct-answer");
+                                $(frage4).addClass("display-none").removeClass("correct-answer");
                                 break;
                             //Antworten werden angezeigt
                             case '1':
