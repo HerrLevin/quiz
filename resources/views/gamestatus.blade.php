@@ -5,7 +5,10 @@
 
     <div class="row">
     <div class="col">
-<h1 class="display-1">Frage</h1>
+<h1 class="display-1" id="question">Frage</h1>
+        <div class="alert alert-primary display-none" id="schaetzen">
+            <h1 class="alert-heading">Schätzen!</h1>
+        </div>
 <div class="alert alert-success" role="alert" id="frage1">
     <h1 class="alert-heading">Antwort 1</h1>
 </div>

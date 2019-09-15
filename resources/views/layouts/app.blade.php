@@ -50,6 +50,9 @@
         //Input feld für schätzfragen
         let inputField = $("#zahl");
 
+        let schaetzen = $("#schaetzen");
+        let hquestion = $("#question");
+
         let textCounter = $("#counter");
         let check = true;
         let printed = false;
@@ -66,6 +69,11 @@
 
                         //nimmt den Wert aus der API und setzt den auf die Variable status
                         let status = data['quiz']['status'];
+                        let questiontext = data['question']['question'];
+                        let answer1 = data['question']['answer1'];
+                        let answer2 = data['question']['answer2'];
+                        let answer3 = data['question']['answer3'];
+                        let answer4 = data['question']['answer4'];
                         let correctAnswerId = data['question']['correct_answer'];
                         //Fragentyp entweder 0 = vier Antwortmöglichkeiten oder 1 = schätzfrage
                         let questionType = data['question']['type'];
@@ -82,10 +90,27 @@
                             //Antworten werden angezeigt
                             case '1':
                                 $('#answersCol').addClass('display-none');
-                                $(frage1).removeClass("display-none").addClass("display-block");
-                                $(frage2).removeClass("display-none").addClass("display-block");
-                                $(frage3).removeClass("display-none").addClass("display-block");
-                                $(frage4).removeClass("display-none").addClass("display-block");
+                                $(hquestion).text(questiontext.toString());
+                                if (questionType == 0) {
+                                    $(schaetzen).addClass("display-none");
+                                    $(frage1).removeClass("display-none").addClass("display-block");
+                                    $(frage2).removeClass("display-none").addClass("display-block");
+                                    $(frage3).removeClass("display-none").addClass("display-block");
+                                    $(frage4).removeClass("display-none").addClass("display-block");
+
+                                    $(frage1).children().text(answer1.toString());
+                                    $(frage2).children().text(answer2.toString());
+                                    $(frage3).children().text(answer3.toString());
+                                    $(frage4).children().text(answer4.toString());
+                                }
+                                if (questionType == 1) {
+                                    $(schaetzen).removeClass("display-none");
+                                    $(schaetzen).children().text("Schätzen!");
+                                    $(frage1).addClass("display-none").removeClass("display-block");
+                                    $(frage2).addClass("display-none").removeClass("display-block");
+                                    $(frage3).addClass("display-none").removeClass("display-block");
+                                    $(frage4).addClass("display-none").removeClass("display-block");
+                                }
                                 break;
                             //Timer für 30 Sekunden
                             case '2':
@@ -101,7 +126,13 @@
                                     $(antwort2).removeClass("display-none").attr("disabled", false);
                                     $(antwort3).removeClass("display-none").attr("disabled", false);
                                     $(antwort4).removeClass("display-none").attr("disabled", false);
+                                    $(frage1).removeClass("display-none");
+                                    $(frage2).removeClass("display-none");
+                                    $(frage3).removeClass("display-none");
+                                    $(frage4).removeClass("display-none");
+
                                     $(inputField).addClass("display-none");
+
 
                                     let x = 31;
 
@@ -170,21 +201,26 @@
                             case'4':
                                 printed = false;
 
-                                switch (correctAnswerId) {
-                                    case '1':
-                                        $(frage1).addClass("correct-answer");
-                                        break;
-                                    case '2':
-                                        $(frage2).addClass("correct-answer");
-                                        break;
-                                    case '3':
-                                        $(frage3).addClass("correct-answer");
-                                        break;
-                                    case '4':
-                                        $(frage4).addClass("correct-answer");
-                                        break;
+                                if (questionType == 0) {
+                                    switch (correctAnswerId) {
+                                        case '1':
+                                            $(frage1).addClass("correct-answer");
+                                            break;
+                                        case '2':
+                                            $(frage2).addClass("correct-answer");
+                                            break;
+                                        case '3':
+                                            $(frage3).addClass("correct-answer");
+                                            break;
+                                        case '4':
+                                            $(frage4).addClass("correct-answer");
+                                            break;
+                                    }
+                                    ;
                                 }
-                                ;
+                                if (questionType == 1) {
+                                    $(schaetzen).children().text(correctAnswerId.toString());
+                                }
                                 break;
 
                         }
