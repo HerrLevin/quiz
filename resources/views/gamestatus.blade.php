@@ -1,7 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-Game: {{ $code }}
+    Game: {{ $code }}
+
+    <div class="row">
+    <div class="col">
 <h1 class="display-1">Frage</h1>
 <div class="alert alert-success" role="alert" id="frage1">
     <h1 class="alert-heading">Antwort 1</h1>
@@ -14,5 +17,15 @@ Game: {{ $code }}
 </div>
 <div class="alert alert-info" role="alert" id="frage4">
     <h1 class="alert-heading">Antwort 4</h1>
+</div>
+    </div>
+    <div id="answersCol" class="col display-none">
+        <h1 class="display-1">Antworten</h1>
+    <table class="table">
+        <tbody id="answers">
+            <tr><td class="h1">Gruppe X</td><td class="h1">1</td></tr>
+        </tbody>
+    </table>
+    </div>
 </div>
 @endsection

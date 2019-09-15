@@ -52,13 +52,14 @@
 
         let textCounter = $("#counter");
         let check = true;
+        let printed = false;
 
 
         setInterval(function () {
             if (check) {
                 $.ajax({
                     type: 'GET',
-                    url: 'http://localhost:8000/api/gamestatus?code=EnBW',
+                    url: '{{ route('api_gamestatus') }}' + '?code=EnBW',
                     dataType: "json",
 
                     success: function (data) {
@@ -72,6 +73,7 @@
                         switch (status) {
                             //no Questions
                             case '0':
+                                $('#answersCol').addClass('display-none');
                                 $(frage1).addClass("display-none").removeClass("correct-answer");
                                 $(frage2).addClass("display-none").removeClass("correct-answer");
                                 $(frage3).addClass("display-none").removeClass("correct-answer");
@@ -79,6 +81,7 @@
                                 break;
                             //Antworten werden angezeigt
                             case '1':
+                                $('#answersCol').addClass('display-none');
                                 $(frage1).removeClass("display-none").addClass("display-block");
                                 $(frage2).removeClass("display-none").addClass("display-block");
                                 $(frage3).removeClass("display-none").addClass("display-block");
@@ -141,6 +144,31 @@
                                 break;
                             //Nutzer bekommt die richtige anwort angezeigt
                             case'3':
+                                $('#answersCol').removeClass('display-none');
+                                if (printed == false) {
+                                    let new_tbody = document.createElement('tbody');
+                                    let old_tbody = document.getElementById('answers');
+
+
+                                    data['answers'].forEach(function(element){
+                                        var new_row = new_tbody.insertRow();
+                                        var cell1 = new_row.insertCell(0);
+                                        var cell2 = new_row.insertCell(1);
+
+                                        cell1.innerHTML = element['username'];
+                                        cell1.className += 'display-3';
+                                        cell2.innerHTML = element['answer'];
+                                        cell2.className +='display-3';
+                                    });
+
+                                    old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
+
+
+                                }
+                                printed = true;
+                                break;
+                            case'4':
+                                printed = false;
 
                                 switch (correctAnswerId) {
                                     case '1':
