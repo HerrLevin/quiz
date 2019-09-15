@@ -69,10 +69,6 @@
                         //Fragentyp entweder 0 = vier Antwortmöglichkeiten oder 1 = schätzfrage
                         let questionType = data['question']['type'];
 
-                        console.log(questionType);
-
-                        console.log(status);
-
                         switch (status) {
                             //no Questions
                             case '0':
@@ -94,7 +90,6 @@
 
                                 //deaktiviert die sekündliche abrfrage an die API
                                 setTimeout(function () {
-                                    console.log("ausgeführt");
                                     check = true;
                                 }, 30000);
 
