@@ -130,5 +130,14 @@ class QuizController extends Controller
 
     }
 
+    public function login(Request $request) {
+        //\Session::set('username', $request->username);
+        session(['username' => $request->username]);
+        return redirect()->route('gameclient', ['id' => $request->quizname]);
+    }
 
+    public function logout(Request $request) {
+        $request->session()->flush();
+        return redirect()->route('welcome');
+    }
 }

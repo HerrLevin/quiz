@@ -24,9 +24,9 @@
     </div>
     <div id="answersCol" class="col display-none">
         <h1 class="display-1">Antworten</h1>
-    <table class="table">
-        <tbody id="answers">
-            <tr><td class="h1">Gruppe X</td><td class="h1">1</td></tr>
+    <table class="table" id="answers_table">
+        <tbody >
+            
         </tbody>
     </table>
     </div>

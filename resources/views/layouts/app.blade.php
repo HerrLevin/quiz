@@ -52,10 +52,36 @@
 
         let schaetzen = $("#schaetzen");
         let hquestion = $("#question");
+        var questionId = '';
+
 
         let textCounter = $("#counter");
         let check = true;
         let printed = false;
+
+        $(".answer-button").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('api_answer') }}",
+                data: {
+                    username: "{{ session('username') }}", // < note use of 'this' here
+                    question: $(this).data("info"),
+                    _token: "{{ csrf_token() }}",
+                    answer: $(this).data("answer")
+                },
+                success: function(result) {
+                    $(antwort1).attr("disabled", true);
+                    $(antwort2).attr("disabled", true);
+                    $(antwort3).attr("disabled", true);
+                    $(antwort4).attr("disabled", true);
+                    alert('Erfolgreich eantwortet!');
+                },
+                error: function(result) {
+                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
+                }
+            });
+        });
 
 
         setInterval(function () {
@@ -75,6 +101,7 @@
                         let answer3 = data['question']['answer3'];
                         let answer4 = data['question']['answer4'];
                         let correctAnswerId = data['question']['correct_answer'];
+                        let questionId = data['question']['id'];
                         //Fragentyp entweder 0 = vier Antwortmöglichkeiten oder 1 = schätzfrage
                         let questionType = data['question']['type'];
 
@@ -126,6 +153,10 @@
                                     $(antwort2).removeClass("display-none").attr("disabled", false);
                                     $(antwort3).removeClass("display-none").attr("disabled", false);
                                     $(antwort4).removeClass("display-none").attr("disabled", false);
+                                    $(antwort1).attr('data-info', questionId);
+                                    $(antwort2).attr('data-info', questionId);
+                                    $(antwort3).attr('data-info', questionId);
+                                    $(antwort4).attr('data-info', questionId);
                                     $(frage1).removeClass("display-none");
                                     $(frage2).removeClass("display-none");
                                     $(frage3).removeClass("display-none");
@@ -176,10 +207,8 @@
                             //Nutzer bekommt die richtige anwort angezeigt
                             case'3':
                                 $('#answersCol').removeClass('display-none');
-                                if (printed == false) {
                                     let new_tbody = document.createElement('tbody');
-                                    let old_tbody = document.getElementById('answers');
-
+                                    let old_tbody = document.getElementById('answers_table').firstChild;
 
                                     data['answers'].forEach(function(element){
                                         var new_row = new_tbody.insertRow();
@@ -195,7 +224,7 @@
                                     old_tbody.parentNode.replaceChild(new_tbody, old_tbody);
 
 
-                                }
+
                                 printed = true;
                                 break;
                             case'4':

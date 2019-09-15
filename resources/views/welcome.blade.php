@@ -82,8 +82,11 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                        <input id="quizname" class="form-control form-control-lg" type="text" placeholder="Quizname?">
-                        <input type="submit" class="btn btn-primary" onclick="window.location.replace('/game/' + document.getElementById('quizname').value);" value="Los!">
+                    <form method="GET" action="{{ route('login') }}">
+                        <input name="quizname" class="form-control form-control-lg" type="text" placeholder="Quizname?">
+                        <input name="username" class="form-control form-control-lg" type="text" placeholder="Username">
+                        <input type="submit" class="btn btn-primary" value="Los!">
+                    </form>
                 </div>
 
 
