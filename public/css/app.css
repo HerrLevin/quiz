@@ -9,3 +9,8 @@
 .correct-answer{
     border: solid 5px green !important;
 }
+
+.btn{
+    width: 100%;
+    display: auto;
+}
