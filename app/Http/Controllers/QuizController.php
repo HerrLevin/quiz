@@ -11,6 +11,8 @@ use PhpParser\Node\Expr\Cast\Object_;
 
 class QuizController extends Controller
 {
+
+
     public function getGameStatus(Request $request) {
         $response = array();
         $quiz = Quizzes::where('code', $request->code)->first();
@@ -75,6 +77,56 @@ class QuizController extends Controller
         $answer->save();
 
         return response()->json(['done'])->setStatusCode(200);
+
+    }
+
+    public function getQuizMaster(Request $request) {
+        if (!isset($request->code)) {
+            return view('welcomemaster');
+        }
+        $statuses = ['inactive', 'displaying questions', 'answering', 'answers locked', 'highlighting'];
+        $quiz = Quizzes::where('code', $request->code)->first();
+
+        if ($quiz === null) {
+            return response('no quiz found', 404);
+        }
+        $question = Question::where('quiz_id', $quiz->id)->where('question_number', $quiz->question)->first();
+        if ($question != null) {
+            $answers = Answers::where('question_id', $question->id)->get();
+        }
+
+        return view('quizmaster', compact('quiz', 'question', 'answers', 'statuses'));
+
+    }
+
+    public function updateQuizMaster(Request $request) {
+        $code = $request->code;
+        $quiz = Quizzes::where('code', $code)->first();
+
+        if ($quiz === null) {
+            return response('no quiz found', 404);
+        }
+
+        if (isset($request->status)) {
+            $quiz->active = $request->status;
+        }
+
+        if (isset($request->previous_question)) {
+            $quiz->active = 0;
+            $quiz->question -= 1;
+        }
+        if (isset($request->next_question)) {
+            $quiz->active = 0;
+            $quiz->question += 1;
+        }
+        $quiz->save();
+
+        $question = Question::where('quiz_id', $quiz->id)->where('question_number', $quiz->question)->first();
+        if ($question != null) {
+            $answers = Answers::where('question_id', $question->id)->get();
+        }
+
+        return view('quizmaster', compact('quiz', 'question', 'answers', 'statuses'));
 
     }
 

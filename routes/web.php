@@ -28,3 +28,6 @@ Route::get('/game/{id}', function($id) {
 Route::get('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
 Route::post('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
 Route::get('/api/answer', ['uses' => 'QuizController@makeAnswer']);
+
+Route::get('/quizmaster', ['uses' => 'QuizController@getQuizMaster']);
+Route::post('/quizmaster', ['uses' => 'QuizController@updateQuizMaster', 'as' => 'updatequiz']);
