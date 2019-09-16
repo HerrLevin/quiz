@@ -62,58 +62,13 @@
         let check = true;
         let printed = false;
         let playQuestion = true;
+        let playReveal = true;
         let pathname = window.location.pathname;
         let audioAnswer = new Audio("{{ asset('audio/antworten.mp3') }}");
         let audioQuestion = new Audio("{{ asset('audio/frage.mp3') }}");
+        let audioReveal = new Audio("{{ asset('audio/aufloesen.mp3') }}");
 
-
-        //Sendet schätzen in DB
-        $(form).submit(function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "{{ route('api_answer') }}",
-                data: {
-                    username: "{{ session('username') }}", // < note use of 'this' here
-                    question: $(this).data("info"),
-                    _token: "{{ csrf_token() }}",
-                    answer: $(inputField).val()
-                },
-                success: function(result) {
-                    $(inputField).attr("disabled", true);
-                    $(button).attr("disabled", true);
-                },
-                error: function(result) {
-                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
-                }
-            });
-        });
-
-        //Sendet Antwort in die DB
-        $(".answer-button").click(function(e) {
-            e.preventDefault();
-            $.ajax({
-                type: "POST",
-                url: "{{ route('api_answer') }}",
-                data: {
-                    username: "{{ session('username') }}", // < note use of 'this' here
-                    question: $(this).data("info"),
-                    _token: "{{ csrf_token() }}",
-                    answer: $(this).data("answer")
-                },
-                success: function(result) {
-                    $(antwort1).attr("disabled", true);
-                    $(antwort2).attr("disabled", true);
-                    $(antwort3).attr("disabled", true);
-                    $(antwort4).attr("disabled", true);
-                },
-                error: function(result) {
-                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
-                }
-            });
-        });
-
-
+        //sekündliche Abfrage
         setInterval(function () {
             if (check) {
                 $.ajax({
@@ -131,13 +86,14 @@
                         let answer3 = data['question']['answer3'];
                         let answer4 = data['question']['answer4'];
                         let correctAnswerId = data['question']['correct_answer'];
-                        let questionId = data['question']['id'];
+                        questionId = data['question']['id'];
                         //Fragentyp entweder 0 = vier Antwortmöglichkeiten oder 1 = schätzfrage
                         let questionType = data['question']['type'];
 
                         switch (status) {
                             //no Questions
                             case '0':
+                                playReveal = true;
                                 $('#answersCol').addClass('display-none');
                                 $(frage1).addClass("display-none").removeClass("correct-answer");
                                 $(frage2).addClass("display-none").removeClass("correct-answer");
@@ -228,7 +184,7 @@
                                     $(inputField).removeClass("display-none").attr("disabled", false);
                                     $(button).removeClass("display-none").attr("disabled", false);
 
-                                    $(form).attr('data-info', questionId);
+                                     $(form).attr('data-info', questionId);
                                     $(antwort1).addClass("display-none");
                                     $(antwort2).addClass("display-none");
                                     $(antwort3).addClass("display-none");
@@ -241,6 +197,7 @@
                                             x--;
                                             $(textCounter).text(x);
                                             if (x == 0) {
+                                                $(inputField).val("");
                                                 $(inputField).attr("disabled", true);
                                                 $(button).attr("disabled", true);
                                             }
@@ -274,6 +231,10 @@
                                 printed = true;
                                 break;
                             case'4':
+                                if (pathname.includes("gamestatus") && playReveal) {
+                                    audioReveal.play();
+                                    playReveal = false;
+                                }
                                 printed = false;
 
                                 if (questionType == 0) {
@@ -308,6 +269,57 @@
                 });
             }
         }, 1000);
+
+        //Sendet schätzen in DB
+        $(form).submit(function(e) {
+            e.preventDefault();
+            console.log($(form).data("info"));
+            console.log(questionId);
+            $.ajax({
+                type: "POST",
+                url: "{{ route('api_answer') }}",
+                data: {
+                    username: "{{ session('username') }}", // < note use of 'this' here
+                    question: questionId,
+                    answer: $(inputField).val()
+                },
+                success: function(result) {
+                    $(inputField).attr("disabled", true);
+                    $(button).attr("disabled", true);
+                    console.log('Success: ' + questionId);
+                    //$(form).trigger("reset");
+                },
+                error: function(result) {
+                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
+                    console.log('e'+questionId);
+
+                }
+            });
+        });
+
+        //Sendet Antwort in die DB
+        $(".answer-button").click(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('api_answer') }}",
+                data: {
+                    username: "{{ session('username') }}", // < note use of 'this' here
+                    question: questionId,
+                    answer: $(this).data("answer")
+                },
+                success: function(result) {
+                    $(antwort1).attr("disabled", true);
+                    $(antwort2).attr("disabled", true);
+                    $(antwort3).attr("disabled", true);
+                    $(antwort4).attr("disabled", true);
+                },
+                error: function(result) {
+                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
+                }
+            });
+        });
+
     });
 </script>
 </html>

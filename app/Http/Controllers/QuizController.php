@@ -67,7 +67,7 @@ class QuizController extends Controller
         $answered = Answers::where('question_id', $request['question'])->where('username', $request['username'])->first();
 
         if ($answered != null) {
-            return response()->json(['error' => 'Your user already voted'])->setStatusCode(408);
+            return response()->json(['error' => 'Your user already voted'])->setStatusCode(409);
         }
 
         $answer = New Answers();

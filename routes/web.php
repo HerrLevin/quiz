@@ -34,6 +34,7 @@ Route::get('/logout', ['uses' => 'QuizController@logout', 'as' => 'logout']);
 Route::get('/api/gamestatus', ['uses' => 'QuizController@getGameStatus', 'as' => 'api_gamestatus']);
 Route::post('/api/gamestatus', ['uses' => 'QuizController@getGameStatus']);
 Route::post('/api/answer', ['uses' => 'QuizController@makeAnswer', 'as' => 'api_answer']);
+Route::get('/api/answer', ['uses' => 'QuizController@makeAnswer', 'as' => 'api_answer']);
 
 Route::get('/quizmaster', ['uses' => 'QuizController@getQuizMaster']);
 Route::post('/quizmaster', ['uses' => 'QuizController@updateQuizMaster', 'as' => 'updatequiz']);
