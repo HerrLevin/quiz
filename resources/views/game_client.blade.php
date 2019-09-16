@@ -10,8 +10,9 @@ Gamecode: {{ $code }} {{ session('username') }} <a href="{{route('logout')}}">Lo
             <button id="antwort2" type="button" class="answer-button btn btn-danger btn-lg display-none" data-answer="2" data-qid="0" disabled>Antwort 2</button>
             <button id="antwort3" type="button" class="answer-button btn btn-warning btn-lg display-none" data-answer="3" data-qid="0" disabled>Antwort 3</button>
             <button id="antwort4" type="button" class="answer-button btn btn-info btn-lg display-none" data-answer="4" data-qid="0" disabled>Antwort 4</button>
-            <form>
+            <form id="form" data-qid="0">
                 <input id="zahl" type="number" class="form-control display-none mt-5" disabled></input>
+                <button id="schButton" type="submit" class="btn btn-primary display-none" disabled>Abschicken</button>
             </form>
         </div>
         <div class="col-12 mt-5">

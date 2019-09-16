@@ -50,6 +50,9 @@
         //Input feld für schätzfragen
         let inputField = $("#zahl");
 
+        let form = $("#form");
+        let button = $("#schButton");
+
         let schaetzen = $("#schaetzen");
         let hquestion = $("#question");
         var questionId = '';
@@ -59,6 +62,29 @@
         let check = true;
         let printed = false;
 
+        //Sendet schätzen in DB
+        $(form).submit(function(e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{{ route('api_answer') }}",
+                data: {
+                    username: "{{ session('username') }}", // < note use of 'this' here
+                    question: $(this).data("info"),
+                    _token: "{{ csrf_token() }}",
+                    answer: $(inputField).val()
+                },
+                success: function(result) {
+                    $(inputField).attr("disabled", true);
+                    $(button).attr("disabled", true);
+                },
+                error: function(result) {
+                    alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
+                }
+            });
+        });
+
+        //Sendet Antwort in die DB
         $(".answer-button").click(function(e) {
             e.preventDefault();
             $.ajax({
@@ -75,7 +101,6 @@
                     $(antwort2).attr("disabled", true);
                     $(antwort3).attr("disabled", true);
                     $(antwort4).attr("disabled", true);
-                    alert('Erfolgreich eantwortet!');
                 },
                 error: function(result) {
                     alert('Ein Fehler trat auf! Eventuell bereits geantwortet?');
@@ -162,7 +187,9 @@
                                     $(frage3).removeClass("display-none");
                                     $(frage4).removeClass("display-none");
 
+                                    //macht Form unsichertbar, weil Antwortmöglichketien gegeben sind
                                     $(inputField).addClass("display-none");
+                                    $(button).addClass("display-none");
 
 
                                     let x = 31;
@@ -183,7 +210,9 @@
 
                                 if(questionType == 1){
                                     $(inputField).removeClass("display-none").attr("disabled", false);
+                                    $(button).removeClass("display-none").attr("disabled", false);
 
+                                    $(form).attr('data-info', questionId);
                                     $(antwort1).addClass("display-none");
                                     $(antwort2).addClass("display-none");
                                     $(antwort3).addClass("display-none");
@@ -197,6 +226,7 @@
                                             $(textCounter).text(x);
                                             if (x == 0) {
                                                 $(inputField).attr("disabled", true);
+                                                $(button).attr("disabled", true);
                                             }
                                         }, 1000 * i);
                                     }

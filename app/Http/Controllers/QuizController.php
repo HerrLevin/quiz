@@ -126,7 +126,7 @@ class QuizController extends Controller
             $answers = Answers::where('question_id', $question->id)->get();
         }
 
-        return view('quizmaster', compact('quiz', 'question', 'answers', 'statuses'));
+        return view('quizmaster', compact('quiz', 'question', 'answers'));
 
     }
 
