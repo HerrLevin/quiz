@@ -61,6 +61,11 @@
         let textCounter = $("#counter");
         let check = true;
         let printed = false;
+        let playQuestion = true;
+        let pathname = window.location.pathname;
+        let audioAnswer = new Audio("{{ asset('audio/antworten.mp3') }}");
+        let audioQuestion = new Audio("{{ asset('audio/frage.mp3') }}");
+
 
         //Sendet schätzen in DB
         $(form).submit(function(e) {
@@ -141,6 +146,11 @@
                                 break;
                             //Antworten werden angezeigt
                             case '1':
+                                //Audio abspielen neue Frage
+                                if (pathname.includes("gamestatus") && playQuestion) {
+                                    audioQuestion.play();
+                                    playQuestion = false;
+                                }
                                 $('#answersCol').addClass('display-none');
                                 $(hquestion).text(questiontext.toString());
                                 if (questionType == 0) {
@@ -166,12 +176,18 @@
                                 break;
                             //Timer für 30 Sekunden
                             case '2':
+                                playQuestion = true;
                                 check = false;
 
                                 //deaktiviert die sekündliche abrfrage an die API
                                 setTimeout(function () {
                                     check = true;
                                 }, 30000);
+
+                                //Audio abspielen
+                                if (pathname.includes("gamestatus")) {
+                                    audioAnswer.play();
+                                }
 
                                 if(questionType == 0){
                                     $(antwort1).removeClass("display-none").attr("disabled", false);

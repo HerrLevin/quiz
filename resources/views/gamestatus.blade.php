@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    Game: {{ $code }}
+    Game: {{ $code }}                 <span id="counter">30</span>
 
     <div class="row">
-    <div class="col-6">
+    <div class="col">
 <h1 class="display-1" id="question">Frage</h1>
         <div class="alert alert-primary display-none" id="schaetzen">
             <h1 class="alert-heading">Schätzen!</h1>
@@ -22,7 +22,7 @@
     <h1 class="alert-heading">Antwort 4</h1>
 </div>
     </div>
-    <div id="answersCol" class="col-6 display-none">
+    <div id="answersCol" class="col display-none">
         <h1 class="display-1">Antworten</h1>
     <table class="table" id="answers_table">
         <tbody >

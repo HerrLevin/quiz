@@ -5,7 +5,7 @@ Gamecode: {{ $code }} {{ session('username') }} <a href="{{route('logout')}}">Lo
 <div class="container">
     <div class="row">
         <div class="col-12">
-            <h1 class="text-center">Frage 1</h1>
+            <h1 class="text-center" id="question">Frage 1</h1>
             <button id="antwort1" type="button" class="answer-button btn btn-success btn-lg display-none" data-answer="1" data-qid="0" disabled>Antwort 1</button>
             <button id="antwort2" type="button" class="answer-button btn btn-danger btn-lg display-none" data-answer="2" data-qid="0" disabled>Antwort 2</button>
             <button id="antwort3" type="button" class="answer-button btn btn-warning btn-lg display-none" data-answer="3" data-qid="0" disabled>Antwort 3</button>
